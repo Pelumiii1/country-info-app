@@ -1,11 +1,11 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-const ImageSwiper = ({ country }) => {
+const ImageSwiper = ({ countryFlag }: { countryFlag: string }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: `${country?.href?.flag}` }}
+        source={{ uri: `${countryFlag}` }}
         style={{
           width: "100%",
           height: 180,

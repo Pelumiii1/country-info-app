@@ -13,11 +13,36 @@ import {
 import ImageSwiper from "../../components/ImageSwiper";
 import { DarkModeContext } from "../../DarkModeContext";
 
+interface CountryInfo {
+  full_name: string;
+  capital: string;
+  description?: string;
+  continent?: string;
+  current_president?: {
+    name?: string;
+  };
+  population: number;
+  currency: string;
+  phone_code: string;
+  size: string;
+  independence_date?: string;
+  href?: {
+    states?: string;
+    flag: string;
+  };
+}
+
+interface State {
+  name: string;
+}
+
 const SingleCountry = () => {
-  const { country } = useLocalSearchParams();
+  const { country } = useLocalSearchParams<{ country: string }>();
   const { isDarkMode } = useContext(DarkModeContext);
-  const [states, setStates] = useState([]);
-  const [countryInfo, setCountryInfo] = useState({});
+  const [states, setStates] = useState<State[]>([]);
+  const [countryInfo, setCountryInfo] = useState<CountryInfo>(
+    {} as CountryInfo
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const getCountryInfo = async () => {
@@ -88,7 +113,7 @@ const SingleCountry = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <ImageSwiper country={countryInfo} />
+        <ImageSwiper countryFlag={countryInfo.href?.flag as string} />
         <View style={{ marginVertical: 10, rowGap: 10 }}>
           <View style={styles.textContainer}>
             <Text style={styles.title}>Full name:</Text>
@@ -133,7 +158,7 @@ const SingleCountry = () => {
             <Text style={styles.title}>Size:</Text>
             <Text style={styles.text}>{countryInfo.size}</Text>
           </View>
-          {countryInfo.independencr_date && (
+          {countryInfo.independence_date && (
             <View style={styles.textContainer}>
               <Text style={styles.title}>Independence Day:</Text>
               <Text style={styles.text}>{countryInfo.independence_date}</Text>

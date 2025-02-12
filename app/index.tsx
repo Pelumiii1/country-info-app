@@ -15,19 +15,26 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import BottomSheet from "../components/BottomSheet";
 import { DarkModeContext } from "../DarkModeContext";
+
+interface Country {
+  name: string;
+  capital: string;
+  href: {
+    flag: string;
+  };
+}
 
 export default function HomeScreen() {
   const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
-  const [countries, setCountries] = useState([]);
-  const [filteredCountries, setFilteredCountries] = useState([]);
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const getCountries = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         "https://restfulcountries.com/api/v1/countries",
@@ -72,7 +79,6 @@ export default function HomeScreen() {
       alignItems: "center",
       gap: 20,
       backgroundColor: "#F2F4F7",
-      paddingHorizontal: "10",
       borderRadius: 4,
       marginTop: 10,
     },
@@ -114,7 +120,6 @@ export default function HomeScreen() {
       <View style={styles.searchContainer}>
         <Feather name="search" size={24} color="#667085" />
         <TextInput
-          name
           placeholder="Search Country"
           style={styles.search}
           value={searchQuery}
@@ -130,10 +135,7 @@ export default function HomeScreen() {
           marginVertical: 20,
         }}
       >
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setIsBottomSheetOpen(true)}
-        >
+        <TouchableOpacity style={styles.button}>
           <Fontisto
             name="world-o"
             size={24}

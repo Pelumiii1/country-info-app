@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 
-const BottomSheet = ({ closeSheet }) => {
+const BottomSheet = ({ closeSheet }: { closeSheet: () => void }) => {
   const slide = useAnimatedValue(900);
 
   const slideUp = () => {
