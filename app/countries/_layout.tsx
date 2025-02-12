@@ -9,9 +9,10 @@ import {
   View,
 } from "react-native";
 import { DarkModeContext } from "../../DarkModeContext";
+import { StatusBar } from "expo-status-bar";
 
 const CountriesLayout = () => {
-  const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
+  const { isDarkMode } = useContext(DarkModeContext);
   const router = useRouter();
   const { country } = useLocalSearchParams();
 
@@ -53,6 +54,7 @@ const CountriesLayout = () => {
         </Text>
       </View>
       <Slot />
+      <StatusBar style={isDarkMode ? "light" : "dark"} />
     </SafeAreaView>
   );
 };

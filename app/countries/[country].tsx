@@ -178,8 +178,6 @@ const SingleCountry = () => {
           </View>
         )}
       </ScrollView>
-
-      <StatusBar style={isDarkMode ? "light" : "dark"} />
     </SafeAreaView>
   );
 };
