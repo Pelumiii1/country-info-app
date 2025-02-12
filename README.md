@@ -25,5 +25,5 @@ This mobile application allows users to view a list of countries, access detaile
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/country-info-app.git
+   git clone https://github.com/pelumiii1/country-info-app.git
    cd country-info-app
