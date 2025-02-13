@@ -18,7 +18,7 @@ This mobile application allows users to view a list of countries, access detaile
 
 - Node.js and npm installed.
 - Expo CLI installed globally (`npm install -g expo-cli`).
-- An API key from [Country API](https://countryapi.io/).
+- An API key from [Country API](https://restcountries.com/v3.1/all).
 
 ### Installation
 
