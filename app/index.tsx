@@ -16,13 +16,16 @@ import {
   View,
 } from "react-native";
 import { DarkModeContext } from "../DarkModeContext";
+import { getData, storeData } from "@/utils/storage";
 
 interface Country {
-  name: string;
+  name: { common: string; official: string };
   capital: string;
-  href: {
-    flag: string;
-  };
+  flag: string;
+  flags: { png: string };
+  population: number;
+  region: string;
+  idd: { root: string; suffixes: string[] };
 }
 
 export default function HomeScreen() {
@@ -36,15 +39,10 @@ export default function HomeScreen() {
   const getCountries = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        "https://restfulcountries.com/api/v1/countries",
-        {
-          headers: {
-            Authorization: `Bearer 2086|hh3UjLISywjzPPvwIbxwOsIehwG7isUibctm4RGh`,
-          },
-        }
-      );
-      setCountries(response.data.data);
+      const response = await axios.get("https://restcountries.com/v3.1/all");
+      const responseData = response.data;
+      setCountries(responseData);
+      await storeData("Countries", JSON.stringify(responseData));
       setIsLoading(false);
     } catch (error) {
       console.log("Error getting all countries", error);
@@ -53,13 +51,28 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    if (countries.length === 0) getCountries();
-  }, [countries]);
+    const fetchStoredCountries = async () => {
+      try {
+        const data = await getData("Countries");
+        const retrievedData = data ? JSON.parse(data) : [];
+
+        if (retrievedData.length === 0) {
+          getCountries();
+        } else {
+          setCountries(retrievedData);
+        }
+      } catch (error) {
+        console.error("Error retrieving countries:", error);
+      }
+    };
+
+    fetchStoredCountries();
+  }, []);
 
   useEffect(() => {
     if (searchQuery) {
       const filtered = countries.filter((country) =>
-        country.name.toLowerCase().includes(searchQuery.toLowerCase())
+        country.name.common.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredCountries(filtered);
     } else {
@@ -77,14 +90,14 @@ export default function HomeScreen() {
     searchContainer: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 20,
       backgroundColor: "#F2F4F7",
       borderRadius: 4,
       marginTop: 10,
+      paddingHorizontal: 10,
     },
     search: {
       color: "#667085",
-      textAlign: "center",
+      textAlign: "left",
     },
     button: {
       borderColor: "#A9B8D4",
@@ -107,7 +120,15 @@ export default function HomeScreen() {
           alignItems: "center",
         }}
       >
-        <Text style={{ color: !isDarkMode ? "black" : "white" }}>Explore</Text>
+        <Text
+          style={{
+            color: !isDarkMode ? "black" : "white",
+            fontFamily: "Roboto",
+            fontSize: 25,
+          }}
+        >
+          Explore
+        </Text>
         <Pressable onPress={toggleDarkMode}>
           <Feather
             name={isDarkMode ? "moon" : "sun"}
@@ -162,7 +183,7 @@ export default function HomeScreen() {
       ) : (
         <FlatList
           data={filteredCountries}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={{
@@ -173,18 +194,24 @@ export default function HomeScreen() {
               }}
               onPress={() =>
                 router.push({
-                  pathname: `/countries/[country]`,
-                  params: { country: item.name },
+                  pathname: `/countries/country`,
+                  params: {
+                    name: item.name.common,
+                    offiical: item.name.official,
+                    flag: item.flags.png,
+                    capital: item.capital,
+                    population: item.population,
+                    continent: item.region,
+                    root: item.idd.root,
+                    suffixes: item.idd.suffixes,
+                  },
                 })
               }
             >
-              <Image
-                source={{ uri: `${item.href.flag}` }}
-                style={{ width: 40, height: 40, borderRadius: 7 }}
-              />
+              <Text style={{ fontSize: 40 }}>{item.flag}</Text>
               <View>
                 <Text style={{ color: !isDarkMode ? "black" : "white" }}>
-                  {item.name}
+                  {item.name.common}
                 </Text>
                 <Text style={{ color: "#667085" }}>{item.capital}</Text>
               </View>

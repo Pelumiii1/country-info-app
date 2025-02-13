@@ -2,6 +2,7 @@
   "expo": {
     "name": "country-app",
     "slug": "country-app",
+    "scheme": "country-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

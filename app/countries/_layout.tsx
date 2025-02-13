@@ -14,7 +14,7 @@ import { StatusBar } from "expo-status-bar";
 const CountriesLayout = () => {
   const { isDarkMode } = useContext(DarkModeContext);
   const router = useRouter();
-  const { country } = useLocalSearchParams();
+  const { name } = useLocalSearchParams();
 
   const styles = StyleSheet.create({
     container: {
@@ -50,7 +50,7 @@ const CountriesLayout = () => {
             color: isDarkMode ? "white" : "black",
           }}
         >
-          {country || "Country Details"}
+          {name}
         </Text>
       </View>
       <Slot />
