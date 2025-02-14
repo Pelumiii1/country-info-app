@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import { DarkModeContext } from "../DarkModeContext";
 import { getData, storeData } from "@/utils/storage";
+import BottomSheet from "@/components/BottomSheet";
 
 interface Country {
   name: { common: string; official: string };
@@ -29,8 +30,10 @@ interface Country {
 }
 
 export default function HomeScreen() {
+  const [type, setType] = useState("");
   const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -156,7 +159,13 @@ export default function HomeScreen() {
           marginVertical: 20,
         }}
       >
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setIsBottomSheetOpen(!isBottomSheetOpen);
+            setType("language");
+          }}
+        >
           <Fontisto
             name="world-o"
             size={24}
@@ -164,7 +173,13 @@ export default function HomeScreen() {
           />
           <Text style={{ color: !isDarkMode ? "black" : "white" }}>EN</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setIsBottomSheetOpen(!isBottomSheetOpen);
+            setType("filter");
+          }}
+        >
           <Feather
             name="filter"
             size={24}
@@ -221,9 +236,12 @@ export default function HomeScreen() {
       )}
 
       <StatusBar style={isDarkMode ? "light" : "dark"} />
-      {/* {isBottomSheetOpen && (
-        <BottomSheet closeSheet={() => setIsBottomSheetOpen(false)} />
-      )} */}
+      {isBottomSheetOpen && (
+        <BottomSheet
+          closeSheet={() => setIsBottomSheetOpen(false)}
+          type={type}
+        />
+      )}
     </SafeAreaView>
   );
 }

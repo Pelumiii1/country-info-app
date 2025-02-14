@@ -1,16 +1,20 @@
-import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import {
   Animated,
   Pressable,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   useAnimatedValue,
-  View,
 } from "react-native";
+import FilterSheet from "./FilterSheet";
+import LanguageSheet from "./LanguageSheet";
 
-const BottomSheet = ({ closeSheet }: { closeSheet: () => void }) => {
+const BottomSheet = ({
+  closeSheet,
+  type,
+}: {
+  closeSheet: () => void;
+  type: string;
+}) => {
   const slide = useAnimatedValue(900);
 
   const slideUp = () => {
@@ -43,24 +47,11 @@ const BottomSheet = ({ closeSheet }: { closeSheet: () => void }) => {
       <Animated.View
         style={[styles.bottomSheet, { transform: [{ translateY: slide }] }]}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontWeight: 700, fontSize: 18 }}>Languages</Text>
-          <TouchableOpacity
-            style={{
-              backgroundColor: "#98A2B3",
-              borderRadius: 4,
-            }}
-            onPress={handleClose}
-          >
-            <Ionicons name="close-outline" size={25} color="black" />
-          </TouchableOpacity>
-        </View>
+        {type === "language" ? (
+          <LanguageSheet closeSheet={handleClose} />
+        ) : (
+          <FilterSheet closeSheet={handleClose} />
+        )}
       </Animated.View>
     </Pressable>
   );
@@ -82,11 +73,22 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   bottomSheet: {
-    height: "70%",
+    height: "auto",
+    maxHeight: "80%",
     width: "93%",
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
+    paddingBottom: 50,
+  },
+  item: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  languageText: {
+    fontSize: 16,
   },
 });
