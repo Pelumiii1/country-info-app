@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
+import { DarkModeContext } from "@/DarkModeContext";
 
 const continents = [
   "Africa",
@@ -30,6 +31,7 @@ const timeZones = [
 ];
 
 const FilterSheet = ({ closeSheet }: { closeSheet: () => void }) => {
+  const { isDarkMode } = useContext(DarkModeContext);
   const [continentExpanded, setContinentExpanded] = useState(false);
   const [timeZoneExpanded, setTimeZoneExpanded] = useState(false);
   const [selectedContinents, setSelectedContinents] = useState<string[]>([]);
@@ -47,9 +49,56 @@ const FilterSheet = ({ closeSheet }: { closeSheet: () => void }) => {
     }
   };
 
+  const styles = StyleSheet.create({
+    header: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    title: {
+      fontWeight: "700",
+      fontSize: 18,
+      color: isDarkMode ? "white" : "black",
+    },
+    sectionHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingVertical: 10,
+      color: isDarkMode ? "white" : "black",
+    },
+    filterItem: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingVertical: 8,
+      color: isDarkMode ? "white" : "black",
+    },
+    filterText: {
+      fontSize: 16,
+      color: isDarkMode ? "white" : "black",
+    },
+    bottomContainer: {
+      flexDirection: "row",
+      gap: 20,
+    },
+    resetButton: {
+      borderWidth: 1,
+      borderColor: "black",
+      padding: 15,
+      textAlign: "center",
+      width: "20%",
+    },
+    resultButton: {
+      borderWidth: 1,
+      borderColor: "black",
+      padding: 15,
+      textAlign: "center",
+      width: "80%",
+    },
+  });
+
   return (
-    <View>
-      <View style={styles.header}>
+    <View style={{ paddingBottom: 20 }}>
+      <View style={[styles.header, { paddingBottom: 10 }]}>
         <Text style={styles.title}>Filter</Text>
         <TouchableOpacity onPress={closeSheet}>
           <AntDesign name="close" size={20} color="gray" />
@@ -62,8 +111,14 @@ const FilterSheet = ({ closeSheet }: { closeSheet: () => void }) => {
           style={styles.sectionHeader}
           onPress={() => setContinentExpanded(!continentExpanded)}
         >
-          <Text style={{ fontSize: 20 }}>Continent</Text>
-          <AntDesign name={continentExpanded ? "up" : "down"} size={16} />
+          <Text style={{ fontSize: 20, color: isDarkMode ? "white" : "black" }}>
+            Continent
+          </Text>
+          <AntDesign
+            name={continentExpanded ? "up" : "down"}
+            size={16}
+            color={isDarkMode ? "white" : "black"}
+          />
         </TouchableOpacity>
         {continentExpanded &&
           continents.map((item) => (
@@ -95,8 +150,14 @@ const FilterSheet = ({ closeSheet }: { closeSheet: () => void }) => {
           style={styles.sectionHeader}
           onPress={() => setTimeZoneExpanded(!timeZoneExpanded)}
         >
-          <Text style={{ fontSize: 20 }}>Time Zone</Text>
-          <AntDesign name={timeZoneExpanded ? "up" : "down"} size={16} />
+          <Text style={{ fontSize: 20, color: isDarkMode ? "white" : "black" }}>
+            Time Zone
+          </Text>
+          <AntDesign
+            name={timeZoneExpanded ? "up" : "down"}
+            size={16}
+            color={isDarkMode ? "white" : "black"}
+          />
         </TouchableOpacity>
         {timeZoneExpanded &&
           timeZones.map((item) => (
@@ -124,46 +185,3 @@ const FilterSheet = ({ closeSheet }: { closeSheet: () => void }) => {
 };
 
 export default FilterSheet;
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  title: {
-    fontWeight: "700",
-    fontSize: 18,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 10,
-  },
-  filterItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 8,
-  },
-  filterText: {
-    fontSize: 16,
-  },
-  bottomContainer: {
-    flexDirection: "row",
-    gap: 20,
-  },
-  resetButton: {
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 15,
-    textAlign: "center",
-    width: "20%",
-  },
-  resultButton: {
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 15,
-    textAlign: "center",
-    width: "80%",
-  },
-});

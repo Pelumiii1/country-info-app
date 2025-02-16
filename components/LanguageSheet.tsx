@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FlatList,
   Text,
@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
+import { DarkModeContext } from "@/DarkModeContext";
 
 const languages = [
   "Bahasa",
@@ -28,12 +29,43 @@ const languages = [
 const LanguageSheet = ({ closeSheet }: { closeSheet: () => void }) => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("");
 
+  const { isDarkMode } = useContext(DarkModeContext);
+
+  const styles = StyleSheet.create({
+    header: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      color: isDarkMode ? "white" : "black",
+    },
+    title: {
+      fontWeight: "700",
+      fontSize: 18,
+      color: isDarkMode ? "white" : "black",
+    },
+    closeButton: {
+      backgroundColor: "#98A2B3",
+      borderRadius: 4,
+      padding: 3,
+    },
+    item: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingVertical: 10,
+    },
+    languageText: {
+      fontSize: 16,
+      color: isDarkMode ? "white" : "black",
+    },
+  });
+
   return (
-    <View>
+    <View style={{ paddingBottom: 20 }}>
       <View style={styles.header}>
         <Text style={styles.title}>Languages</Text>
         <TouchableOpacity style={styles.closeButton} onPress={closeSheet}>
-          <Ionicons name="close-outline" size={25} color="black" />
+          <Ionicons name="close-outline" size={20} color="black" />
         </TouchableOpacity>
       </View>
 
@@ -59,29 +91,3 @@ const LanguageSheet = ({ closeSheet }: { closeSheet: () => void }) => {
 };
 
 export default LanguageSheet;
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  title: {
-    fontWeight: "700",
-    fontSize: 18,
-  },
-  closeButton: {
-    backgroundColor: "#98A2B3",
-    borderRadius: 4,
-    padding: 5,
-  },
-  item: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 10,
-  },
-  languageText: {
-    fontSize: 16,
-  },
-});

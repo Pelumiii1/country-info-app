@@ -1,8 +1,6 @@
-import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
-  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -12,61 +10,10 @@ import {
 } from "react-native";
 import { DarkModeContext } from "../../DarkModeContext";
 
-interface CountryInfo {
-  name: { common: string; official: string };
-  capital: string;
-  description?: string;
-  continent?: string;
-  current_president?: {
-    name?: string;
-  };
-  population: number;
-  currency: string;
-  phone_code: string;
-  size: string;
-  independence_date?: string;
-  flags: { svg: string; png: string };
-}
-
 const SingleCountry = () => {
   const { flag, offiical, capital, population, continent, suffixes, root } =
     useLocalSearchParams();
   const { isDarkMode } = useContext(DarkModeContext);
-  const [countryInfo, setCountryInfo] = useState<CountryInfo>(
-    {} as CountryInfo
-  );
-
-  //   try {
-  //     const response = await axios.get(
-  //       `https://restfulcountries.com/api/v1/countries/${country}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer 2086|hh3UjLISywjzPPvwIbxwOsIehwG7isUibctm4RGh`,
-  //         },
-  //       }
-  //     );
-  //     setCountryInfo(response.data.data);
-  //     if (response?.data?.data?.href?.states) {
-  //       const statesResponse = await axios.get(
-  //         `${response?.data?.data?.href?.states}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer 2086|hh3UjLISywjzPPvwIbxwOsIehwG7isUibctm4RGh`,
-  //           },
-  //         }
-  //       );
-  //       setStates(statesResponse.data.data);
-  //     }
-  //   } catch (error) {
-  //     console.log("Error fetch country", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (country) getCountryInfo();
-  // }, [country]);
 
   const styles = StyleSheet.create({
     container: {
@@ -80,11 +27,13 @@ const SingleCountry = () => {
     title: {
       fontWeight: 700,
       fontSize: 16,
+
       color: isDarkMode ? "white" : "black",
     },
     text: {
       fontWeight: 300,
       fontSize: 16,
+      width: "70%",
       color: isDarkMode ? "white" : "black",
     },
   });
